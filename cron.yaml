@@ -1,0 +1,4 @@
+cron:
+- description: Notification job
+  url: /notify/
+  schedule: every friday 15:00
