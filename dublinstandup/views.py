@@ -13,6 +13,7 @@
 # limitations under the License.
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
+from django.template.response import SimpleTemplateResponse
 from google.appengine.api import mail
 
 from .models import Schedule
@@ -31,9 +32,7 @@ The Dublin Standup Bot
 
 
 def index(request):
-    schedule = Schedule.current_schedule()
-    return HttpResponse("<h1>Standup for the week of {}.</h1><h2>Hosted by {} and {}</h2>"
-                        .format(schedule.standup_week_start, schedule.first_pivot, schedule.second_pivot))
+    return SimpleTemplateResponse('index.html', {'schedule': Schedule.current_schedule()})
 
 
 def notify(request):
