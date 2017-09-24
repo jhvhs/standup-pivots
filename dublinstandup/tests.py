@@ -9,6 +9,15 @@ from .validators import validate_monday
 
 # noinspection PyMethodMayBeStatic
 class DublinStandupTestCase(TestCase):
+    def setUp(self):
+        self.today = date.today()
+        self.next_week = self.today + timedelta(7)
+
+    def insert_schedule_fixtures(self):
+        pivot = Pivot.objects.create(full_name="Won Ton Goodsoup", email="wonton@goodsoups.info", slack_handle="wtd")
+        Schedule.objects.create(standup_week_start=self.today, first_pivot=pivot, second_pivot=pivot)
+        Schedule.objects.create(standup_week_start=self.next_week, first_pivot=pivot, second_pivot=pivot)
+
     def test_valid_pivot(self):
         pivot = Pivot(full_name="foo", email="bar@baz.com", slack_handle="jimmy")
         pivot.full_clean()
@@ -37,24 +46,22 @@ class DublinStandupTestCase(TestCase):
             self.assertRaises(ValidationError, lambda: validate_monday(d))
 
     def test_current_schedule(self):
-        today = date.today()
-        next_week = today + timedelta(7)
-        pivot = Pivot.objects.create(full_name="Won Ton Goodsoup", email="wonton@goodsoups.info", slack_handle="wtd")
-        Schedule.objects.create(standup_week_start=today, first_pivot=pivot, second_pivot=pivot)
-        Schedule.objects.create(standup_week_start=next_week, first_pivot=pivot, second_pivot=pivot)
+        self.insert_schedule_fixtures()
         for i in range(5):
-            self.assertEqual(Schedule.current_schedule(i).standup_week_start, today)
+            self.assertEqual(Schedule.current_schedule(i).standup_week_start, self.today)
         for i in range(5, 7):
-            self.assertEqual(Schedule.current_schedule(i).standup_week_start, next_week)
+            self.assertEqual(Schedule.current_schedule(i).standup_week_start, self.next_week)
 
     def test_next_schedule(self):
-        today = date.today()
-        next_week = today + timedelta(7)
-        pivot = Pivot.objects.create(full_name="Won Ton Goodsoup", email="wonton@goodsoups.info", slack_handle="wtd")
-        Schedule.objects.create(standup_week_start=today, first_pivot=pivot, second_pivot=pivot)
-        Schedule.objects.create(standup_week_start=next_week, first_pivot=pivot, second_pivot=pivot)
-        self.assertEqual(Schedule.next_schedule().standup_week_start, next_week)
+        self.insert_schedule_fixtures()
+        self.assertEqual(Schedule.next_schedule().standup_week_start, self.next_week)
 
     def test_pivot_name(self):
         pivot = Pivot(full_name=u"Jelomjúsø van der Vękūblmsti")
         self.assertEqual(pivot.first_name, u"Jelomjúsø")
+
+    def test_following_schedule(self):
+        self.insert_schedule_fixtures()
+        schedule = Schedule.current_schedule(1)
+        self.assertEqual(schedule.standup_week_start, self.today)
+        self.assertEqual(schedule.following_schedule.standup_week_start, self.next_week)

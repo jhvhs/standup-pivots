@@ -14,7 +14,10 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.response import SimpleTemplateResponse
-from google.appengine.api import mail
+try:
+    from google.appengine.api import mail
+except ImportError:
+    import gmail_dummy as mail
 
 from .models import Schedule
 
@@ -32,7 +35,11 @@ The Dublin Standup Bot
 
 
 def index(request):
-    return SimpleTemplateResponse('index.html', {'schedule': Schedule.current_schedule()})
+    current_schedule = Schedule.current_schedule()
+    return SimpleTemplateResponse('index.html', {
+        'schedule': current_schedule,
+        'following_schedule': current_schedule.following_schedule,
+    })
 
 
 def notify(request):

@@ -55,3 +55,7 @@ class Schedule(models.Model):
     @classmethod
     def next_schedule(cls):
         return cls.current_schedule(6)
+
+    @property
+    def following_schedule(self):
+        return self.__class__.objects.filter(standup_week_start__gt=self.standup_week_start).first()

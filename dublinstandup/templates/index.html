@@ -1,2 +1,9 @@
+<html>
+<body>
 <h1>Standup for the week of {{ schedule.standup_week_start }}.</h1>
 <h2>Hosted by {{ schedule.first_pivot }} and {{ schedule.second_pivot }}</h2>
+{% if following_schedule %}<hr/>
+<h1>Standup for the upcoming week of {{ following_schedule.standup_week_start }}</h1>
+<h2>Hosted by {{ following_schedule.first_pivot }} and {{ following_schedule.second_pivot }}</h2>{% endif %}
+</body>
+</html>
