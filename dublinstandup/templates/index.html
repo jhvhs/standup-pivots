@@ -1,9 +1,30 @@
+{% load static %}<!DOCTYPE html>
 <html>
-<body>
-<h1>Standup for the week of {{ schedule.standup_week_start }}.</h1>
-<h2>Hosted by {{ schedule.first_pivot }} and {{ schedule.second_pivot }}</h2>
-{% if following_schedule %}<hr/>
-<h1>Standup for the upcoming week of {{ following_schedule.standup_week_start }}</h1>
-<h2>Hosted by {{ following_schedule.first_pivot }} and {{ following_schedule.second_pivot }}</h2>{% endif %}
+<head>
+    <title>Dublin Pivots</title>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}">
+    <meta name="robots" content="NONE,NOARCHIVE"/>
+</head>
+<body class="dashboard">
+    <div id="container">
+        <div id="header">
+            <div id="branding">
+                <h1 id="site-name">
+                    Dublin Pivots
+                </h1>
+            </div>
+        </div>
+
+        <div id="content">
+            <div class="module">
+                <h2>Standup for the week of {{ schedule.standup_week_start }}.</h2>
+                <h1>Hosted by {{ schedule.first_pivot }} and {{ schedule.second_pivot }}</h1>
+            </div>
+            {% if following_schedule %}<div class="module">
+                <h2>Standup for the upcoming week of {{ following_schedule.standup_week_start }}</h2>
+                <h1>Hosted by {{ following_schedule.first_pivot }} and {{ following_schedule.second_pivot }}</h1></div>{% endif %}
+        </div>
+    </div>
 </body>
 </html>
