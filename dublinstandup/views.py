@@ -14,6 +14,7 @@
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.template.response import SimpleTemplateResponse
+
 try:
     from google.appengine.api import mail
 except ImportError:
@@ -32,6 +33,8 @@ Yours truly,
 
 The Dublin Standup Bot 
                    """
+
+SLACK_MESSAGE = "The standup hosts for the next week are {} and {}"
 
 
 def index(request):
@@ -65,3 +68,8 @@ def notify(request):
     )
 
     return HttpResponse("{} and {} have been notified".format(first_pivot, second_pivot))
+
+
+def slack_notification():
+    schedule = Schedule.next_schedule()
+    return HttpResponse(SLACK_MESSAGE.format(schedule.first_pivot.slack_handle, schedule.second_pivot.slack_handle))
