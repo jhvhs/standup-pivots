@@ -15,10 +15,11 @@
 from django.conf.urls import include, url
 from django.contrib import admin
 
-from dublinstandup.views import index, notify
+from dublinstandup.views import index, notify, slack_notification
 
 urlpatterns = [
     url(r'^$', index),
     url(r'^notify/$', notify),
+    url(r'^slack_notification/$', slack_notification),
     url(r'^admin/', include(admin.site.urls)),
 ]

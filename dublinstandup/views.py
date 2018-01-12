@@ -34,7 +34,7 @@ Yours truly,
 The Dublin Standup Bot 
                    """
 
-SLACK_MESSAGE = "The standup hosts for the next week are {} and {}"
+SLACK_MESSAGE = "The standup hosts for the next week are <@{}> and <@{}>"
 
 
 def index(request):
@@ -70,6 +70,6 @@ def notify(request):
     return HttpResponse("{} and {} have been notified".format(first_pivot, second_pivot))
 
 
-def slack_notification():
+def slack_notification(request):
     schedule = Schedule.next_schedule()
     return HttpResponse(SLACK_MESSAGE.format(schedule.first_pivot.slack_handle, schedule.second_pivot.slack_handle))
