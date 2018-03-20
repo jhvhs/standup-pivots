@@ -12,14 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from django.conf.urls import include, url
-from django.contrib import admin
+"""
+WSGI config for standup project.
 
-from dublinstandup.views import index, notify, slack_notification
+It exposes the WSGI callable as a module-level variable named ``application``.
 
-urlpatterns = [
-    url(r'^$', index),
-    url(r'^notify/$', notify),
-    url(r'^slack_notification/$', slack_notification),
-    url(r'^admin/', include(admin.site.urls)),
-]
+For more information on this file, see
+https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
+"""
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "standup.settings")
+
+application = get_wsgi_application()
