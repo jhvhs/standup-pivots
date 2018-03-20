@@ -1,0 +1,6 @@
+---
+applications:
+- name: standup-pivots
+  memory: 512M
+  instances: 1
+  buildpack: python_buildpack
