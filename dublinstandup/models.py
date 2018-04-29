@@ -9,6 +9,7 @@ class Pivot(models.Model):
     full_name = models.CharField(max_length=255)
     email = models.CharField(max_length=255, validators=(EmailValidator(),))
     slack_handle = models.CharField(max_length=255)
+    has_left_the_office = models.BooleanField(default=False)
 
     def __str__(self):
         return self.full_name
