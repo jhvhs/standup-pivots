@@ -4,13 +4,13 @@ from __future__ import unicode_literals
 
 import django.core.validators
 from django.db import migrations, models
-import dublinstandup.validators
+import standup.validators
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('dublinstandup', '0001_initial'),
+        ('standup', '0001_initial'),
     ]
 
     operations = [
@@ -22,6 +22,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='schedule',
             name='standup_week_start',
-            field=models.DateField(unique=True, validators=[dublinstandup.validators.validate_monday]),
+            field=models.DateField(unique=True, validators=[standup.validators.validate_monday]),
         ),
     ]

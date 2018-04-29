@@ -1,1 +1,1 @@
-web: gunicorn standup.wsgi:application
+web: gunicorn standup_pivots.wsgi:application

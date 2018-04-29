@@ -28,8 +28,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('standup_week_start', models.DateField(unique=True)),
-                ('first_pivot', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='as_first_pivot', to='dublinstandup.Pivot')),
-                ('second_pivot', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='as_second_pivot', to='dublinstandup.Pivot')),
+                ('first_pivot', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='as_first_pivot', to='standup.Pivot')),
+                ('second_pivot', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='as_second_pivot', to='standup.Pivot')),
             ],
         ),
     ]
