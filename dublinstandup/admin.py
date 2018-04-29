@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Pivot, Schedule
+from .models import Pivot, Standup
 
 
 class ScheduleListFilter(admin.SimpleListFilter):
@@ -32,11 +32,11 @@ class ScheduleListFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() is None:
-            return queryset.filter(standup_week_start__gte=date.today())
+            return queryset.filter(week_start__gte=date.today())
         if self.value() == 'all':
             return queryset
         if self.value() == 'past':
-            return queryset.filter(standup_week_start__lt=date.today())
+            return queryset.filter(week_start__lt=date.today())
 
 
 class PivotAdmin(admin.ModelAdmin):
@@ -45,10 +45,10 @@ class PivotAdmin(admin.ModelAdmin):
 
 
 class ScheduleAdmin(admin.ModelAdmin):
-    list_display = ('standup_week_start', 'first_pivot', 'second_pivot')
-    ordering = ('standup_week_start',)
+    list_display = ('week_start', 'first_pivot', 'second_pivot')
+    ordering = ('week_start',)
     list_filter = (ScheduleListFilter,)
 
 
 admin.site.register(Pivot, PivotAdmin)
-admin.site.register(Schedule, ScheduleAdmin)
+admin.site.register(Standup, ScheduleAdmin)

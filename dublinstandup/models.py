@@ -18,23 +18,23 @@ class Pivot(models.Model):
         return self.full_name.split(' ')[0]
 
 
-class Schedule(models.Model):
-    standup_week_start = models.DateField(unique=True, validators=(validate_monday,))
+class Standup(models.Model):
+    week_start = models.DateField(unique=True, validators=(validate_monday,))
     first_pivot = models.ForeignKey('Pivot', on_delete=models.SET_NULL, related_name="as_first_pivot", null=True)
     second_pivot = models.ForeignKey('Pivot', on_delete=models.SET_NULL, related_name="as_second_pivot", null=True)
 
     def __str__(self):
-        return "Week of %s" % self.standup_week_start
+        return "Week of %s" % self.week_start
 
     class Meta:
-        ordering = ('standup_week_start',)
+        ordering = ('week_start',)
 
     @classmethod
     def current_schedule(cls, weekday_index=date.today().weekday()):
         if weekday_index < 5:
-            qs = cls.objects.filter(standup_week_start__lte=date.today()).order_by('-standup_week_start')
+            qs = cls.objects.filter(week_start__lte=date.today()).order_by('-week_start')
         else:
-            qs = cls.objects.filter(standup_week_start__gt=date.today())
+            qs = cls.objects.filter(week_start__gt=date.today())
         return qs.first()
 
     @classmethod
@@ -43,4 +43,4 @@ class Schedule(models.Model):
 
     @property
     def following_schedule(self):
-        return self.__class__.objects.filter(standup_week_start__gt=self.standup_week_start).first()
+        return self.__class__.objects.filter(week_start__gt=self.week_start).first()
