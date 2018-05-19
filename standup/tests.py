@@ -1,5 +1,6 @@
 # coding=utf-8
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.test import TestCase
 from datetime import date, timedelta
 
@@ -8,7 +9,7 @@ from .validators import validate_monday
 
 
 # noinspection PyMethodMayBeStatic
-class DublinStandupTestCase(TestCase):
+class StandupTestCase(TestCase):
     def setUp(self):
         self.today = date.today()
         self.next_week = self.today + timedelta(7)
@@ -65,3 +66,44 @@ class DublinStandupTestCase(TestCase):
         schedule = Standup.current_schedule(1)
         self.assertEqual(schedule.week_start, self.today)
         self.assertEqual(schedule.following_schedule.week_start, self.next_week)
+
+
+# noinspection PyMethodMayBeStatic
+class StandupDatasetTestCase(TestCase):
+    fixtures = ("dataset.json",)
+    last_standup_week_date = "2018-05-28"
+    last_assigned_pivot_id = 10
+    departed_pivot_id = 5
+
+    def test_new_standup_assignment(self):
+        Standup.plan(2)
+        scheduled_standups = Standup.objects.filter(week_start__gt=self.last_standup_week_date)
+        self.assertEqual(scheduled_standups.count(), 2, "Expected 2 new standups to be scheduled")
+
+    def test_new_standup_assignees(self):
+        Standup.plan(2)
+        for s in Standup.objects.filter(week_start__gt=self.last_standup_week_date).all():
+            self.assertGreater(s.first_pivot_id, self.last_assigned_pivot_id)
+            self.assertGreater(s.second_pivot_id, self.last_assigned_pivot_id)
+
+    def test_available_pivots(self):
+        self.assertEqual(Pivot.available().count(), 13)
+
+    def test_next_pivot_for_standup(self):
+        next_pivot = Pivot.next_pivot_for_standup()
+        self.assertGreater(next_pivot.id, self.last_assigned_pivot_id)
+
+    def test_standup_rotation(self):
+        Standup.plan(2)
+        next_pivot = Pivot.next_pivot_for_standup()
+        self.assertIsNotNone(next_pivot.id)
+
+    def test_next_pivot_randomness(self):
+        standup_pivot_ids = [Pivot.new_pivot_for_standup().id for _ in range(4)]
+        self.assertGreater(len(set(standup_pivot_ids)), 1)
+
+    def test_departed_pivots_are_not_assigned(self):
+        Standup.plan(12)
+        scheduled_standups = Standup.objects.filter(week_start__gt=self.last_standup_week_date).exclude(
+            first_pivot_id=self.departed_pivot_id).exclude(second_pivot_id=self.departed_pivot_id)
+        self.assertEqual(scheduled_standups.count(), 12)

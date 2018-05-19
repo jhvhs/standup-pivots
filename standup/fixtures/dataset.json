@@ -1,0 +1,187 @@
+[
+  {
+    "pk": "1",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "ablack@pivotlal.null",
+      "full_name": "Adam Black",
+      "slack_handle": "JHGHJGJ",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "2",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "cdrake@pivotal.null",
+      "full_name": "Cindy Drake",
+      "slack_handle": "LKJLKJL",
+      "has_left_the_office": false
+    }
+  },
+  { 
+    "pk": "3",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "efong@pivotal.null",
+      "full_name": "Ed Fong",
+      "slack_handle": "JHGHJGJ",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "4",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "ghagiwara@pivotal.null",
+      "slack_handle": "JHGJYU",
+      "full_name": "Gemmei Hagiwara",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "5",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "ijarlett@pivotal.null",
+      "slack_handle": "HGHGFGHF",
+      "full_name": "Ivan Jarlett",
+      "has_left_the_office": true
+    }
+  },
+  {
+    "pk": "6",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "jtaylor@pivotal.null",
+      "slack_handle": "JHGJHG",
+      "full_name": "Jane Taylor",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "7",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "klewis@pivotal.null",
+      "slack_handle": "YVHDGDK",
+      "full_name": "Kathy Lewis",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "8",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "mnam@pivotal.null",
+      "slack_handle": "JHGDJHDGHJ",
+      "full_name": "Ming Nam",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "9",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "opeterson@pivotal.null",
+      "slack_handle": "LKJDKDJKLD",
+      "full_name": "Ole Peterson",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "10",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "qren@pivotal.null",
+      "slack_handle": "JKHDJHGD",
+      "full_name": "Qing Ren",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "11",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "staylor@pivotal.null",
+      "slack_handle": "DSFAFAF",
+      "full_name": "Simon Taylor",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "12",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "uvadlamani@pivotal.null",
+      "slack_handle": "DKJHDTDJDH",
+      "full_name": "Umaa Vadlamani",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "13",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "wxu@pivotal.null",
+      "slack_handle": "KJDHDJ",
+      "full_name": "Wei Xu",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "14",
+    "model": "standup.pivot",
+    "fields": {
+      "email": "yzimova@pivotal.null",
+      "slack_handle": "JHGDJHDG",
+      "full_name": "Yana Zimova",
+      "has_left_the_office": false
+    }
+  },
+  {
+    "pk": "1",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-04-30",
+      "first_pivot_id": "1",
+      "second_pivot_id": "2"
+    }
+  },
+  {
+    "pk": "2",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-07",
+      "first_pivot_id": "3",
+      "second_pivot_id": "4"
+    }
+  },
+  {
+    "pk": "3",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-14",
+      "first_pivot_id": "5",
+      "second_pivot_id": "6"
+    }
+  },
+  {
+    "pk": "4",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-21",
+      "first_pivot_id": "7",
+      "second_pivot_id": "8"
+    }
+  },
+  {
+    "pk": "5",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-28",
+      "first_pivot_id": "9",
+      "second_pivot_id": "10"
+    }
+  }
+]
