@@ -1,0 +1,51 @@
+---
+resource_types:
+- name: slack-notification-resource
+  type: docker-image
+  source:
+    repository: cfcommunity/slack-notification-resource
+    tag: latest
+
+resources:
+- name: schedule
+  type: time
+  source:
+    start: '3PM'
+    stop: '3:30 PM'
+    interval: 1h
+    location: Europe/Dublin
+    days:
+    - Thursday
+
+- name: notifier
+  type: slack-notification-resource
+  source:
+    url: ((slack-notification-url))
+
+
+jobs:
+- name: notify
+  plan:
+  - get: schedule
+    trigger: true
+  - task: notify-standup-host
+    config:
+      platform: linux
+      image_resource:
+        type: docker-image
+        source:
+          repository: alpine
+          tag: latest
+      outputs:
+      - name: slack-message
+
+      run:
+        path: /bin/sh
+        args:
+        - -exc
+        - |
+          wget -q -O- ((standup-app-url))/slack_notification/ > slack-message/announcement.txt
+  - put: notifier
+    params:
+      text_file: slack-message/announcement.txt
+
