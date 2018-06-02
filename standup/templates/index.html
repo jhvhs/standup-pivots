@@ -18,11 +18,11 @@
 
         <div id="content">
             <div class="module">
-                <h2>Standup for the week of {{ schedule.standup_week_start }}.</h2>
+                <h2>Standup for the week of {{ schedule.week_start }}.</h2>
                 <h1>Hosted by {{ schedule.first_pivot }} and {{ schedule.second_pivot }}</h1>
             </div>
             {% if following_schedule %}<div class="module">
-                <h2>Standup for the upcoming week of {{ following_schedule.standup_week_start }}</h2>
+                <h2>Standup for the upcoming week of {{ following_schedule.week_start }}</h2>
                 <h1>Hosted by {{ following_schedule.first_pivot }} and {{ following_schedule.second_pivot }}</h1></div>{% endif %}
         </div>
     </div>
