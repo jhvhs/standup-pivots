@@ -71,7 +71,9 @@ class StandupTestCase(TestCase):
 # noinspection PyMethodMayBeStatic
 class StandupDatasetTestCase(TestCase):
     fixtures = ("dataset.json",)
-    last_standup_week_date = "2018-05-28"
+    last_standup_week_date = "2018-05-14"
+    current_week_start = (date.today() - timedelta(date.today().weekday())).__str__()
+    next_week_start = (date.today() - (timedelta(7) - timedelta(date.today().weekday()))).__str__()
     last_assigned_pivot_id = 10
     departed_pivot_id = 5
 
@@ -107,3 +109,20 @@ class StandupDatasetTestCase(TestCase):
         scheduled_standups = Standup.objects.filter(week_start__gt=self.last_standup_week_date).exclude(
             first_pivot_id=self.departed_pivot_id).exclude(second_pivot_id=self.departed_pivot_id)
         self.assertEqual(scheduled_standups.count(), 12)
+
+    def test_standups_are_scheduled_for_current_week_if_needed(self):
+        qs = Standup.objects.filter(week_start__gte=self.current_week_start)
+        self.assertEqual(qs.count(), 0)
+        current_schedule = Standup.current_schedule()
+        self.assertIsNotNone(current_schedule)
+
+    def test_standups_are_scheduled_for_next_week_if_needed(self):
+        qs = Standup.objects.filter(week_start__gte=self.current_week_start)
+        self.assertEqual(qs.count(), 0)
+        next_schedule = Standup.next_schedule()
+        self.assertIsNotNone(next_schedule)
+
+    def test_standup_plans_start_this_week(self):
+        Standup.plan(4)
+        qs = Standup.objects.filter(week_start__gte=self.current_week_start)
+        self.assertEqual(qs.count(), 4)

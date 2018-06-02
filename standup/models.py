@@ -3,7 +3,7 @@ from random import choice
 
 from django.core.validators import EmailValidator
 from django.db import models
-from django.db.models import Max, Q
+from django.db.models import Max
 
 from .validators import validate_monday
 
@@ -64,11 +64,19 @@ class Standup(models.Model):
 
     @classmethod
     def current_schedule(cls, weekday_index=date.today().weekday()):
+        qs = cls._get_current_schedule(weekday_index)
+        if qs.count() == 0:
+            cls.plan(4)
+            qs = cls._get_current_schedule(weekday_index)
+        return qs.first()
+
+    @classmethod
+    def _get_current_schedule(cls, weekday_index):
         if weekday_index < 5:
             qs = cls.objects.filter(week_start__lte=date.today()).order_by('-week_start')
         else:
             qs = cls.objects.filter(week_start__gt=date.today())
-        return qs.first()
+        return qs
 
     @classmethod
     def next_schedule(cls):
@@ -81,6 +89,7 @@ class Standup(models.Model):
     @classmethod
     def plan(cls, week_count):
         last_date = cls.objects.aggregate(Max("week_start"))['week_start__max']
+        last_date = max(last_date, _last_monday())
         for i in range(week_count):
             offset = timedelta(weeks=1 + i)
             first_pivot = Pivot.new_pivot_for_standup()
@@ -88,3 +97,12 @@ class Standup(models.Model):
             while second_pivot == first_pivot:
                 second_pivot = Pivot.new_pivot_for_standup()
             cls(week_start=last_date + offset, first_pivot=first_pivot, second_pivot=second_pivot).save()
+
+
+def _this_monday():
+    current_weekday = date.today().weekday()
+    return date.today() - (timedelta(7) - timedelta(current_weekday))
+
+
+def _last_monday():
+    return _this_monday() - timedelta(7)

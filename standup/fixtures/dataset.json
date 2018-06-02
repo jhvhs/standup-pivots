@@ -143,7 +143,7 @@
     "pk": "1",
     "model": "standup.standup",
     "fields": {
-      "week_start": "2018-04-30",
+      "week_start": "2018-04-16",
       "first_pivot_id": "1",
       "second_pivot_id": "2"
     }
@@ -152,7 +152,7 @@
     "pk": "2",
     "model": "standup.standup",
     "fields": {
-      "week_start": "2018-05-07",
+      "week_start": "2018-04-23",
       "first_pivot_id": "3",
       "second_pivot_id": "4"
     }
@@ -161,7 +161,7 @@
     "pk": "3",
     "model": "standup.standup",
     "fields": {
-      "week_start": "2018-05-14",
+      "week_start": "2018-04-30",
       "first_pivot_id": "5",
       "second_pivot_id": "6"
     }
@@ -170,7 +170,7 @@
     "pk": "4",
     "model": "standup.standup",
     "fields": {
-      "week_start": "2018-05-21",
+      "week_start": "2018-05-07",
       "first_pivot_id": "7",
       "second_pivot_id": "8"
     }
@@ -179,7 +179,7 @@
     "pk": "5",
     "model": "standup.standup",
     "fields": {
-      "week_start": "2018-05-28",
+      "week_start": "2018-05-14",
       "first_pivot_id": "9",
       "second_pivot_id": "10"
     }
