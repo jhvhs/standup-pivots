@@ -49,13 +49,13 @@ class StandupTestCase(TestCase):
     def test_current_schedule(self):
         self.insert_schedule_fixtures()
         for i in range(5):
-            self.assertEqual(Standup.current_schedule(i).week_start, self.today)
+            self.assertEqual(Standup.current_standup(i).week_start, self.today)
         for i in range(5, 7):
-            self.assertEqual(Standup.current_schedule(i).week_start, self.next_week)
+            self.assertEqual(Standup.current_standup(i).week_start, self.next_week)
 
     def test_next_schedule(self):
         self.insert_schedule_fixtures()
-        self.assertEqual(Standup.next_schedule().week_start, self.next_week)
+        self.assertEqual(Standup.next_standup().week_start, self.next_week)
 
     def test_pivot_name(self):
         pivot = Pivot(full_name=u"Jelomjúsø van der Vękūblmsti")
@@ -63,9 +63,9 @@ class StandupTestCase(TestCase):
 
     def test_following_schedule(self):
         self.insert_schedule_fixtures()
-        schedule = Standup.current_schedule(1)
+        schedule = Standup.current_standup(1)
         self.assertEqual(schedule.week_start, self.today)
-        self.assertEqual(schedule.following_schedule.week_start, self.next_week)
+        self.assertEqual(schedule.following_standup.week_start, self.next_week)
 
 
 # noinspection PyMethodMayBeStatic
@@ -113,13 +113,13 @@ class StandupDatasetTestCase(TestCase):
     def test_standups_are_scheduled_for_current_week_if_needed(self):
         qs = Standup.objects.filter(week_start__gte=self.current_week_start)
         self.assertEqual(qs.count(), 0)
-        current_schedule = Standup.current_schedule()
+        current_schedule = Standup.current_standup()
         self.assertIsNotNone(current_schedule)
 
     def test_standups_are_scheduled_for_next_week_if_needed(self):
         qs = Standup.objects.filter(week_start__gte=self.current_week_start)
         self.assertEqual(qs.count(), 0)
-        next_schedule = Standup.next_schedule()
+        next_schedule = Standup.next_standup()
         self.assertIsNotNone(next_schedule)
 
     def test_standup_plans_start_this_week(self):

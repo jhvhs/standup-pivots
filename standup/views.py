@@ -7,13 +7,13 @@ SLACK_MESSAGE = "The standup hosts for the next week are <@{}> and <@{}>"
 
 
 def index(request):
-    current_schedule = Standup.current_schedule()
+    current_standup = Standup.current_standup()
     return SimpleTemplateResponse('index.html', {
-        'schedule': current_schedule,
-        'following_schedule': current_schedule.following_schedule,
+        'standup': current_standup,
+        'following_standup': current_standup.following_standup,
     })
 
 
 def slack_notification(request):
-    schedule = Standup.next_schedule()
-    return HttpResponse(SLACK_MESSAGE.format(schedule.first_pivot.slack_handle, schedule.second_pivot.slack_handle))
+    standup = Standup.next_standup()
+    return HttpResponse(SLACK_MESSAGE.format(standup.first_pivot.slack_handle, standup.second_pivot.slack_handle))

@@ -63,15 +63,15 @@ class Standup(models.Model):
         ordering = ('week_start',)
 
     @classmethod
-    def current_schedule(cls, weekday_index=date.today().weekday()):
-        qs = cls._get_current_schedule(weekday_index)
+    def current_standup(cls, weekday_index=date.today().weekday()):
+        qs = cls._get_current_standup(weekday_index)
         if qs.count() == 0:
             cls.plan(4)
-            qs = cls._get_current_schedule(weekday_index)
+            qs = cls._get_current_standup(weekday_index)
         return qs.first()
 
     @classmethod
-    def _get_current_schedule(cls, weekday_index):
+    def _get_current_standup(cls, weekday_index):
         if weekday_index < 5:
             qs = cls.objects.filter(week_start__lte=date.today()).order_by('-week_start')
         else:
@@ -79,11 +79,11 @@ class Standup(models.Model):
         return qs
 
     @classmethod
-    def next_schedule(cls):
-        return cls.current_schedule(6)
+    def next_standup(cls):
+        return cls.current_standup(6)
 
     @property
-    def following_schedule(self):
+    def following_standup(self):
         return self.__class__.objects.filter(week_start__gt=self.week_start).first()
 
     @classmethod
