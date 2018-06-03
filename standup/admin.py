@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Pivot, Standup
 
 
-class ScheduleListFilter(admin.SimpleListFilter):
+class StandupListFilter(admin.SimpleListFilter):
     title = _("standup weeks")
 
     parameter_name = 'schedule_dates'
@@ -40,14 +40,20 @@ class ScheduleListFilter(admin.SimpleListFilter):
 
 
 class PivotAdmin(admin.ModelAdmin):
-    list_display = ('full_name', 'email', 'slack_handle')
+    list_display = ('full_name', 'email', 'slack_handle', 'has_left_the_office')
     ordering = ('full_name',)
+    list_filter = ('has_left_the_office',)
 
 
 class ScheduleAdmin(admin.ModelAdmin):
     list_display = ('week_start', 'first_pivot', 'second_pivot')
     ordering = ('week_start',)
-    list_filter = (ScheduleListFilter,)
+    list_filter = (StandupListFilter,)
+
+    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
+        context['adminform'].form.fields['first_pivot'].queryset = Pivot.available()
+        context['adminform'].form.fields['second_pivot'].queryset = Pivot.available()
+        return super(ScheduleAdmin, self).render_change_form(request, context, add, change, form_url, obj)
 
 
 admin.site.register(Pivot, PivotAdmin)
