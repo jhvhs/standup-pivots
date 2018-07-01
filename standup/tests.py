@@ -1,8 +1,10 @@
 # coding=utf-8
-from django.core.exceptions import ValidationError
-from django.db.models import Q
-from django.test import TestCase
 from datetime import date, timedelta
+
+import timeout_decorator
+from django.core.exceptions import ValidationError
+from django.core.management import call_command
+from django.test import TestCase
 
 from .models import Pivot, Standup
 from .validators import validate_monday
@@ -104,6 +106,12 @@ class StandupDatasetTestCase(TestCase):
         standup_pivot_ids = [Pivot.new_pivot_for_standup().id for _ in range(4)]
         self.assertGreater(len(set(standup_pivot_ids)), 1)
 
+    def test_next_pivot_exclusion(self):
+        standup_pivot = Pivot.new_pivot_for_standup()
+        for _ in range(14):
+            random_pivot = Pivot.new_pivot_for_standup(excluded=standup_pivot)
+            self.assertNotEqual(standup_pivot.id, random_pivot.id)
+
     def test_departed_pivots_are_not_assigned(self):
         Standup.plan(12)
         scheduled_standups = Standup.objects.filter(week_start__gt=self.last_standup_week_date).exclude(
@@ -126,3 +134,10 @@ class StandupDatasetTestCase(TestCase):
         Standup.plan(4)
         qs = Standup.objects.filter(week_start__gte=self.current_week_start)
         self.assertEqual(qs.count(), 4)
+
+    @timeout_decorator.timeout(5, exception_message="Should not take longer than 5 seconds to schedule a standup")
+    def test_scheduling_works_with_a_single_new_pivot(self):
+        call_command('loaddata', 'all_but_one', verbosity=0)
+        new_pivots = Pivot.objects.filter(as_first_pivot__isnull=True, as_second_pivot__isnull=True)
+        self.assertEqual(1, new_pivots.count())
+        Standup.plan(1)

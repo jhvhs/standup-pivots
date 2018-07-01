@@ -1,0 +1,20 @@
+[
+  {
+    "pk": "6",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-21",
+      "first_pivot_id": "11",
+      "second_pivot_id": "12"
+    }
+  },
+  {
+    "pk": "7",
+    "model": "standup.standup",
+    "fields": {
+      "week_start": "2018-05-28",
+      "first_pivot_id": "13",
+      "second_pivot_id": "1"
+    }
+  }
+]

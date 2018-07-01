@@ -33,14 +33,20 @@ class Pivot(models.Model):
         return Pivot()
 
     @classmethod
-    def new_pivot_for_standup(cls):
+    def new_pivot_for_standup(cls, excluded=None):
         new_pivots = cls.available().filter(as_first_pivot__isnull=True, as_second_pivot__isnull=True)
+        if excluded is not None:
+            new_pivots = new_pivots.exclude(id=excluded.id)
         if new_pivots.count() == 0:
-            skip_weeks = cls.available().count() / 5
-            skipped_pivots = cls._ids_for_pivots_running_standups_over_last_weeks(skip_weeks)
-            new_pivots = cls.available().exclude(pk__in=skipped_pivots)
+            new_pivots = cls._get_random_pivots()
         new_id = choice(new_pivots.values_list('id', flat=True))
         return cls.objects.get(pk=new_id)
+
+    @classmethod
+    def _get_random_pivots(cls):
+        skip_weeks = cls.available().count() / 5
+        skipped_pivots = cls._ids_for_pivots_running_standups_over_last_weeks(skip_weeks)
+        return cls.available().exclude(pk__in=skipped_pivots)
 
     @classmethod
     def _ids_for_pivots_running_standups_over_last_weeks(cls, number_of_weeks):
@@ -93,9 +99,7 @@ class Standup(models.Model):
         for i in range(week_count):
             offset = timedelta(weeks=1 + i)
             first_pivot = Pivot.new_pivot_for_standup()
-            second_pivot = Pivot.new_pivot_for_standup()
-            while second_pivot == first_pivot:
-                second_pivot = Pivot.new_pivot_for_standup()
+            second_pivot = Pivot.new_pivot_for_standup(excluded=first_pivot)
             cls(week_start=last_date + offset, first_pivot=first_pivot, second_pivot=second_pivot).save()
 
 
