@@ -95,9 +95,9 @@ class Standup(models.Model):
     @classmethod
     def plan(cls, week_count):
         last_date = cls.objects.aggregate(Max("week_start"))['week_start__max']
-        last_date = max(last_date, _last_monday())
+        last_date = max(last_date, _this_monday())
         for i in range(week_count):
-            offset = timedelta(weeks=1 + i)
+            offset = timedelta(weeks=i)
             first_pivot = Pivot.new_pivot_for_standup()
             second_pivot = Pivot.new_pivot_for_standup(excluded=first_pivot)
             cls(week_start=last_date + offset, first_pivot=first_pivot, second_pivot=second_pivot).save()
@@ -105,8 +105,7 @@ class Standup(models.Model):
 
 def _this_monday():
     current_weekday = date.today().weekday()
-    return date.today() - (timedelta(7) - timedelta(current_weekday))
-
-
-def _last_monday():
-    return _this_monday() - timedelta(7)
+    if current_weekday > 0:
+        return date.today() - (timedelta(7) - timedelta(current_weekday))
+    else:
+        return date.today()
