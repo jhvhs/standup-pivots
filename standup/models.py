@@ -105,10 +105,7 @@ class Standup(models.Model):
 
 def _this_monday():
     current_weekday = date.today().weekday()
-    if current_weekday > 0:
-        return date.today() - timedelta(6 - current_weekday)
-    else:
-        return date.today()
+    return date.today() - timedelta(current_weekday)
 
 
 def _last_monday():
