@@ -14,6 +14,7 @@ import dj_database_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get("APP_SECRET_KEY")
+SITE_TITLE = os.environ.get("APP_TITLE", "Weekly rotation")
 
 DEBUG = os.environ.get("APP_DEBUG", "f").lower().startswith("t")
 

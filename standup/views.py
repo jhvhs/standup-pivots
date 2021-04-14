@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.template.response import SimpleTemplateResponse
 
 from .models import Standup
+from standup_pivots.settings import SITE_TITLE
 
 SLACK_MESSAGE = "The standup hosts for the next week are <@{}> and <@{}>"
 
@@ -11,6 +12,7 @@ def index(request):
     return SimpleTemplateResponse('index.html', {
         'standup': current_standup,
         'following_standup': current_standup.following_standup,
+        'title': SITE_TITLE,
     })
 
 
